@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #FFFBF2;
+  color: #1B1B2E;
+  font-family: var(--font-nunito), sans-serif;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-33.3333%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-\[marquee_30s_linear_infinite\] {
+    animation: none !important;
+  }
+}
