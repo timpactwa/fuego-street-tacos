@@ -118,6 +118,7 @@ function Step2({
   address,
   setAddress,
   onContinue,
+  onBack,
 }: {
   orderType: OrderType
   pickupTime: string
@@ -125,6 +126,7 @@ function Step2({
   address: AddressState
   setAddress: (a: AddressState) => void
   onContinue: () => void
+  onBack: () => void
 }) {
   const canContinue =
     orderType === 'pickup'
@@ -134,6 +136,10 @@ function Step2({
   if (orderType === 'pickup') {
     return (
       <div>
+        <button onClick={onBack} className="font-body text-sm text-muted hover:text-charcoal mb-5 flex items-center gap-1 transition-colors">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+          Back
+        </button>
         <h2 className="font-display text-3xl text-charcoal mb-2">Pick your time</h2>
         <p className="font-body text-muted text-sm mb-6">We&apos;ll have it ready when you arrive · Mon–Thu 11am–9pm</p>
         <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mb-8 max-h-72 overflow-y-auto pr-1">
@@ -164,6 +170,10 @@ function Step2({
 
   return (
     <div>
+      <button onClick={onBack} className="font-body text-sm text-muted hover:text-charcoal mb-5 flex items-center gap-1 transition-colors">
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+        Back
+      </button>
       <h2 className="font-display text-3xl text-charcoal mb-2">Delivery address</h2>
       <p className="font-body text-muted text-sm mb-6">We deliver within 5 miles of 47 South Street, Morristown</p>
       <div className="space-y-4 mb-8">
@@ -240,6 +250,7 @@ function Step3({
   setPayment,
   loading,
   onPlaceOrder,
+  onBack,
 }: {
   contact: ContactState
   setContact: (c: ContactState) => void
@@ -247,6 +258,7 @@ function Step3({
   setPayment: (p: PaymentState) => void
   loading: boolean
   onPlaceOrder: () => void
+  onBack: () => void
 }) {
   const cardDigits = payment.card.replace(/\s/g, '')
   const canOrder =
@@ -273,6 +285,10 @@ function Step3({
 
   return (
     <div>
+      <button onClick={onBack} className="font-body text-sm text-muted hover:text-charcoal mb-5 flex items-center gap-1 transition-colors">
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+        Back
+      </button>
       <h2 className="font-display text-3xl text-charcoal mb-6">Contact & Payment</h2>
 
       <div className="space-y-6">
@@ -497,7 +513,7 @@ function Step4({
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function OrderPage() {
-  const { items, total, clearCart } = useCart()
+  const { items, total, clearCart, closeCart } = useCart()
 
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1)
   const [orderType, setOrderType] = useState<OrderType | null>(null)
@@ -517,6 +533,7 @@ export default function OrderPage() {
   }
 
   async function handlePlaceOrder() {
+    closeCart()
     setLoading(true)
     setConfirmedItems([...items])
     await new Promise(r => setTimeout(r, 600))
@@ -620,6 +637,7 @@ export default function OrderPage() {
                     address={address}
                     setAddress={setAddress}
                     onContinue={() => setStep(3)}
+                    onBack={() => setStep(1)}
                   />
                 )}
                 {step === 3 && (
@@ -630,6 +648,7 @@ export default function OrderPage() {
                     setPayment={setPayment}
                     loading={loading}
                     onPlaceOrder={handlePlaceOrder}
+                    onBack={() => setStep(2)}
                   />
                 )}
                 {step === 4 && (
